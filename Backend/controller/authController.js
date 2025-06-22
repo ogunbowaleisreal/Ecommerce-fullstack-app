@@ -15,7 +15,7 @@ const authUser = async(req,res)=>{
         if(match){
             const access_token = jwt.sign(
                 {userInfo:
-                {"username": registeredUser.username, "roles" : roles }
+                {"username": registeredUser.username, "roles" : roles } 
                 },
                 process.env.ACCESS_TOKEN_SECRET,
                 {expiresIn: '30m'}

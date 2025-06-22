@@ -4,19 +4,21 @@ import Login from './pages/login'
 import Register from './pages/register'
 import Notfound from './pages/notfound'
 import ProtectedRoute from './components/ProtectedRoute'
+import Admindashboard from "./components/admindashboard"
 import React from "react"
 
 function Registerlogout(){
     return <Register/>
 }
 
-function App() {
 
+function App(){
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path = '/' element = {<ProtectedRoute> <Home/> </ProtectedRoute>}/>
+        <Route path="/Admin" element={<ProtectedRoute route="admin"><Admindashboard/></ProtectedRoute>}/>
+        <Route path = '/' element = {<ProtectedRoute route="home"> <Home/> </ProtectedRoute>}/>
         <Route path = '/login' element = {<Login/>}/>
         <Route path= '/register' element = {<Registerlogout/>}/>
         <Route path= '*' element = {<Notfound/>}/>

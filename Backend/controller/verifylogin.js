@@ -9,7 +9,7 @@ const verifyAuthController= async(req,res)=>{
     const cookies = req.cookies
     const access_token = cookies.jwt_access
     if(!access_token){
-        return res.status(401).send("not allowed")
+        return res.status(401).send("not allowed") 
     }
     jwt.verify(
         access_token,

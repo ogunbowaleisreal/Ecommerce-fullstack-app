@@ -11,12 +11,13 @@ const verify_Roles = (...allowedRoles)=>{
             }
             
         }
-        for(item of rolesAvailable){
-            if (item !== true){
-                return res.send(`${req.user} is not allowed for this route`)
-            }
-        }
+
+        const rolesCheck =rolesAvailable.find(item=>item===true)
+        if(rolesCheck){
         next()
+        }else{
+            return res.send(`${req.user} is not allowed for this route`)
+        }
     }
 }
 

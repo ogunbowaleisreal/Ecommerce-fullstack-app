@@ -3,6 +3,7 @@ require('dotenv').config()
 const refreshRoute = require('../controller/refreshToken')
 
 const verifyAccess= async(req,res,next)=>{
+
     try{
     const cookies= req.cookies
     const token = cookies.jwt_access

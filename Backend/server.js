@@ -24,6 +24,8 @@ app.use(express.static(path.join(__dirname, '/public')));
 
 app.use('/refresh', require("./router/refresh"));
 
+app.use('/admin',require("./router/admin"))
+
 app.use('/verify', require("./router/verifyAuth"));
 
 app.use('/logout', require("./router/logout"));

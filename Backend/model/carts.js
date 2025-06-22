@@ -1,0 +1,9 @@
+const mongoose= require('mongoose')
+const schema = mongoose.Schema
+
+const cartSchema = new schema({
+
+})
+
+const newDb = mongoose.connection.useDb("EcommerceDb") 
+module.exports = newDb.model('Cart',cartSchema)
