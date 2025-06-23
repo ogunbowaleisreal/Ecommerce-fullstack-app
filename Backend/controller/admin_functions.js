@@ -7,6 +7,10 @@ const createProduct=(req,res)=>{
 
 }
 
+const productDetails=(req,res)=>{
+
+}
+
 const deleteProduct=(req,res)=>{
 
 }
@@ -28,11 +32,15 @@ const getOrders=(req,res)=>{
 }
 
 const getallProducts=(req,res)=>{
-
+    return res.send("admin user got here")
 }
 
 const updateUser=(req,res)=>{
 
 }
 
-module.exports = {updateOrder,createProduct,createUser,deleteProduct,updateProduct,getOrders,getallProducts}
+const orderDetails=(req,res)=>{
+    
+}
+
+module.exports = {updateOrder,createProduct,createUser,deleteProduct,updateProduct,getOrders,getallProducts,productDetails,orderDetails}

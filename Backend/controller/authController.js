@@ -11,11 +11,13 @@ const authUser = async(req,res)=>{
     
         if (registeredUser){
             const match =  await bcrypt.compare(password, registeredUser.password)
-        const roles = Object.values(Object.values(registeredUser.roles))
+        const roles = registeredUser.roles
+        console.log(roles)
+        const user_id = registeredUser.user_id
         if(match){
             const access_token = jwt.sign(
                 {userInfo:
-                {"username": registeredUser.username, "roles" : roles } 
+                {"username": registeredUser.username, "roles" : roles ,"user_id":user_id} 
                 },
                 process.env.ACCESS_TOKEN_SECRET,
                 {expiresIn: '30m'}

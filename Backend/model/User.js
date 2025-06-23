@@ -11,17 +11,12 @@ const usersSchema = new schema({
         required: true 
     },
     roles:{
-        user:{
-        type: Number,
-        default: 2001,
-        },
-    editor: Number,
-    Admin: Number
+        type:[Number],
+        enum:[2001,2002,2003,2004],
+        default:[2001]
     },
-    refresh_token : String,
-    balance : {
-        type:mongoose.Schema.Types.Decimal128,
-        default:0
+    user_id : {
+        type:mongoose.Schema.Types.ObjectId,
      }
 });
 

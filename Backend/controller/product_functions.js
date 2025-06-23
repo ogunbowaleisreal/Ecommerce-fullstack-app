@@ -34,4 +34,4 @@ const deleteReview = async(req,res)=>{
 const updateReview = async(req,res)=>{
 
 }
-module.exports = {getallProducts, createReviews, getProductDetails,getallfeaturedProducts,deleteReview,updateReview,getuserOrders}
+module.exports = {getallProducts, createReviews, getProductDetails,getallfeaturedProducts,deleteReview,updateReview,getuserOrders,getbyFilter}

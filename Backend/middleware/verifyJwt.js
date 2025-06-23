@@ -13,6 +13,7 @@ const verifyAccess= async(req,res,next)=>{
     )
     req.user = decoded.userInfo.username
     req.roles = decoded.roles
+    req.user_id = decoded.user_id
     next()
     
     }catch(err){
@@ -22,7 +23,9 @@ const verifyAccess= async(req,res,next)=>{
             res.cookie('jwt_access', newAccess, {httpOnly:true,sameSite:'Lax',secure:false,maxAge: 24 * 60 * 60 * 1000})
             const newPayload = jwt.verify(newAccess,process.env.ACCESS_TOKEN_SECRET)
             req.user = newPayload.userInfo.username
+            console.log(newPayload.userInfo.username)
             req.roles = newPayload.roles
+            req.user_id = newPayload.user_id
                 next()
 
         }else{

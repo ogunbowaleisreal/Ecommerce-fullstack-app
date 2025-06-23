@@ -1,28 +1,32 @@
 const mongoose = require('mongoose')
 const schema = mongoose.Schema
 
-const transactionSchema = new schema({
-    username:{
+const productsSchema = new schema({
+    name:{
         type: String,
         required : true
     },
-    date:{
-        type: Date,
-    timestamps : true
+    Product_id:{
+        type: mongoose.Schema.Types.ObjectId
     },
-    type:{ 
-        type:"String",
-        enum : ["income","expense"],
+    Price:{
+        type: Number,
         required:true
     },
-    category:{
-        type: String,
-        enum :["Transportation","Food","Salary","Leisure","Others","Subscriptions"],
+    category:{ 
+        type:"String",
+        required:true
+    },
+    quantity:{
+        type: Number,
         required : true
     },
     amount:{
         type : Number,
         required : true
+    },
+    image_url:{
+        type:String
     },
     description :{
         type : String
@@ -31,5 +35,5 @@ const transactionSchema = new schema({
     timestamps: true
 }
 )
-const newDb = mongoose.connection.useDb("ExpenseTrackerDB") 
-module.exports = newDb.model('Transaction',transactionSchema)
+const newDb = mongoose.connection.useDb("EcommerceDb") 
+module.exports = newDb.model('Product',productsSchema)
