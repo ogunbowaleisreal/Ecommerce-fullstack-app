@@ -1,0 +1,89 @@
+[
+  {
+    "product_name": "Men's Casual Shirt",
+    "Price": 29.99,
+    "discounted_price": 19.99,
+    "category": "Men",
+    "quantity": 100,
+    "image_url": "https://example.com/images/mens-casual-shirt.jpg",
+    "description": "Comfortable cotton casual shirt perfect for everyday wear."
+  },
+  {
+    "product_name": "Women's Running Shoes",
+    "Price": 79.99,
+    "discounted_price": 69.99,
+    "category": "Footwear",
+    "quantity": 50,
+    "image_url": "https://example.com/images/womens-running-shoes.jpg",
+    "description": "Lightweight and durable running shoes with great cushioning."
+  },
+  {
+    "product_name": "Kids' Backpack",
+    "Price": 24.5,
+    "category": "Kids",
+    "quantity": 75,
+    "image_url": "https://example.com/images/kids-backpack.jpg",
+    "description": "Bright and spacious backpack for school and travel."
+  },
+  {
+    "product_name": "Gaming Keyboard",
+    "Price": 120,
+    "discounted_price": 99.99,
+    "category": "Gaming",
+    "quantity": 30,
+    "image_url": "https://example.com/images/gaming-keyboard.jpg",
+    "description": "Mechanical keyboard with RGB backlight and programmable keys."
+  },
+  {
+    "product_name": "Smartphone Model X",
+    "Price": 699,
+    "discounted_price": 649,
+    "category": "Phones",
+    "quantity": 200,
+    "image_url": "https://example.com/images/smartphone-model-x.jpg",
+    "description": "Latest smartphone with high-resolution display and fast processor."
+  },
+  {
+    "product_name": "Women's Denim Jacket",
+    "Price": 59.99,
+    "category": "Women",
+    "quantity": 120,
+    "image_url": "https://example.com/images/womens-denim-jacket.jpg",
+    "description": "Stylish denim jacket suitable for all seasons."
+  },
+  {
+    "product_name": "Men's Leather Wallet",
+    "Price": 39.99,
+    "discounted_price": 29.99,
+    "category": "Men",
+    "quantity": 150,
+    "image_url": "https://example.com/images/mens-leather-wallet.jpg",
+    "description": "Genuine leather wallet with multiple card slots."
+  },
+  {
+    "product_name": "Wireless Gaming Mouse",
+    "Price": 49.99,
+    "category": "Gaming",
+    "quantity": 80,
+    "image_url": "https://example.com/images/wireless-gaming-mouse.jpg",
+    "description": "High precision wireless mouse with ergonomic design."
+  },
+  {
+    "product_name": "4K Ultra HD TV",
+    "Price": 999.99,
+    "discounted_price": 899.99,
+    "category": "Eletronics",
+    "quantity": 40,
+    "image_url": "https://example.com/images/4k-ultrahd-tv.jpg",
+    "description": "Stunning 4K UHD television with smart features and HDR."
+  },
+  {
+    "product_name": "Men's Running Sneakers",
+    "Price": 69.99,
+    "discounted_price": 59.99,
+    "category": "Footwear",
+    "quantity": 110,
+    "image_url": "https://example.com/images/mens-running-sneakers.jpg",
+    "description": "Durable and comfortable running sneakers for men."
+  }
+]

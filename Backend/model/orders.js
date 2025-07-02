@@ -7,16 +7,31 @@ const orderSchema = new schema({
         ref: 'Users',
         required : true
     },
-
-    product:[{
+    products:[{
+        product_id:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Products'
+        },
+        quantity:{
+            type: Number,
+            required:true
+        },
+        price:{
+            type:Number,
+            required: true
+        }
     }],
 
-    price: Number,
+    totalAmount: Number,
     status:{
         type: String,
-        enum : ["Ordered","Pending","Delivered","Shipped","Confirmed"]
+        enum : ["Ordered","Delivered","Shipped",],
+        default: "Ordered"
+    },
+payment_status:{
+    type:String,
+    enum:["pending","failed","successful"],
+    default: "pending"
     }}, 
     {
         timestamps : true

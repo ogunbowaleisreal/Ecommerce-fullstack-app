@@ -8,7 +8,7 @@ const reviewSchema = new schema({
         max:5,
         required : true
     },
-    product :{
+    product_id:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Products"
     },
@@ -16,6 +16,10 @@ const reviewSchema = new schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Users"       
     },
+    comment:{
+        type: String,
+        required:true
+    }
 },
 {
     timestamps:true

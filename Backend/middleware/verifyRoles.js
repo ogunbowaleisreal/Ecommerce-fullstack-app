@@ -1,8 +1,11 @@
 const verify_Roles = (...allowedRoles)=>{
     return (req,res,next)=>{
+
+        try{
+            
         const rolesArray = [...allowedRoles]
         const rolesAvailable = []
-        console.log(req.roles)
+        console.log(req.user)
         for (items of rolesArray){
             if(!req.roles.includes(items)){
                 rolesAvailable.push(false)
@@ -16,9 +19,13 @@ const verify_Roles = (...allowedRoles)=>{
         if(rolesCheck){
         next()
         }else{
-            return res.send(`${req.user} is not allowed for this route`)
+            return res.status(403).json({"message":`${req.user} is not allowed for this route`})
         }
+    }catch(err){
+        console.log(err)
+        return res.status(500).json({"message":"internal server error"})
     }
+}
 }
 
 module.exports = verify_Roles

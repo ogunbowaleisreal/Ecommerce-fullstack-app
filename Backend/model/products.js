@@ -2,27 +2,24 @@ const mongoose = require('mongoose')
 const schema = mongoose.Schema
 
 const productsSchema = new schema({
-    name:{
+    product_name:{
         type: String,
         required : true
-    },
-    Product_id:{
-        type: mongoose.Schema.Types.ObjectId
     },
     Price:{
         type: Number,
         required:true
     },
+    discounted_price:{
+        type: Number,
+    },
     category:{ 
-        type:"String",
+        type:String,
+        enum:["Men","Women","Kids","Eletronics","Phones","Gaming","Footwear","Food"],
         required:true
     },
     quantity:{
         type: Number,
-        required : true
-    },
-    amount:{
-        type : Number,
         required : true
     },
     image_url:{

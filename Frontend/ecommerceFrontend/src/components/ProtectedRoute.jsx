@@ -6,10 +6,8 @@ import React from 'react';
 function ProtectedRoute({route,children}){
 
     const [authorized, setauthorized] = useState(null)
-    console.log(route)
     const auth= async ()=>{
         try{
-            if(route=="home"){               
         const response = await api.get('/verify')
             if(response.status == 200){
                 setauthorized(true)
@@ -18,18 +16,7 @@ function ProtectedRoute({route,children}){
                 console.log(response.status == 200)
                 setauthorized(false)
                 return
-            }
-        }else{
-        const response = await api.get('/verifyadmin')
-            if(response.status == 200){
-                setauthorized(true)
-                return
-            }else{
-                console.log(response.status == 200)
-                setauthorized(false)
-                return
             }  
-        }
     }catch(err){
         console.log(err)
         setauthorized(false)
@@ -39,8 +26,8 @@ function ProtectedRoute({route,children}){
 
         if(authorized == null){
         return <div class= "min-h-screen justify-center items-center flex">
-            <div>
-                ......loading Transactions
+            <div className='animate-pulse'>
+            LOADING TRANSACTIONS...
             </div>
             </div>
     }

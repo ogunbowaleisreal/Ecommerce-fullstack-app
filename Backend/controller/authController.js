@@ -12,18 +12,19 @@ const authUser = async(req,res)=>{
         if (registeredUser){
             const match =  await bcrypt.compare(password, registeredUser.password)
         const roles = registeredUser.roles
-        console.log(roles)
-        const user_id = registeredUser.user_id
+        console.log(registeredUser._id)
+        const user_id = registeredUser._id
         if(match){
             const access_token = jwt.sign(
                 {userInfo:
                 {"username": registeredUser.username, "roles" : roles ,"user_id":user_id} 
-                },
+            },
                 process.env.ACCESS_TOKEN_SECRET,
-                {expiresIn: '30m'}
+                {expiresIn: '30s'}
             );
             const refresh_token = jwt.sign(
-                {"username": registeredUser.username}, 
+                {userInfo:
+                    {"username": registeredUser.username,"roles":roles,"user_id":user_id}}, 
                 process.env.REFRESH_TOKEN_SECRET,
                 {expiresIn: '1d'}
             );

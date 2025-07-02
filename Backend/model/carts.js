@@ -4,10 +4,19 @@ const schema = mongoose.Schema
 const cartSchema = new schema({
     user_id:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Users"
+        ref: "Users",
+        required: true
     },
     Products:[{
-        type:mongoose.Schema.Types.ObjectId
+        product_id:{
+        type:mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "products"
+    },
+    quantity:{
+        type: Number,
+        required: true
+    }
     }]
 })
 

@@ -5,6 +5,8 @@ const cookieParser = require('cookie-parser');
 const corsOptions = require('./config/corsOptions')
 const cors = require('cors');
 const credentials= require('./middleware/credentials');
+const cloudinary = require('cloudinary')
+const multer = require('multer')
 PORT = 3500;
 const connectDB = require('./config/dbConn')
 const mongoose = require('mongoose')
@@ -30,7 +32,9 @@ app.use('/verify', require("./router/verifyAuth"));
 
 app.use('/logout', require("./router/logout"));
 
-app.use('/transactions', require('./router/transactions'));
+app.use('/cart', require("./router/cart"));
+
+app.use('/shop', require('./router/shop_routes'));
 
 app.use('/register', require('./router/register'));
 

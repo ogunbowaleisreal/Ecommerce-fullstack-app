@@ -7,25 +7,27 @@ const verifyAccess= async(req,res,next)=>{
     try{
     const cookies= req.cookies
     const token = cookies.jwt_access
+    console.log(token)
     const decoded = jwt.verify(
         token,
         process.env.ACCESS_TOKEN_SECRET,
     )
+        console.log(decoded)
     req.user = decoded.userInfo.username
-    req.roles = decoded.roles
-    req.user_id = decoded.user_id
+    req.roles = decoded.userInfo.roles
+    req.user_id = decoded.userInfo.user_id
     next()
-    
+  
     }catch(err){
         console.log(err)
         const newAccess = await refreshRoute(req,res)
         if(newAccess){
+            console.log(newAccess)
             res.cookie('jwt_access', newAccess, {httpOnly:true,sameSite:'Lax',secure:false,maxAge: 24 * 60 * 60 * 1000})
             const newPayload = jwt.verify(newAccess,process.env.ACCESS_TOKEN_SECRET)
             req.user = newPayload.userInfo.username
-            console.log(newPayload.userInfo.username)
-            req.roles = newPayload.roles
-            req.user_id = newPayload.user_id
+            req.roles = newPayload.userInfo.roles
+            req.user_id = newPayload.userInfo.user_id
                 next()
 
         }else{

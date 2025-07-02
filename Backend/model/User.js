@@ -17,7 +17,8 @@ const usersSchema = new schema({
     },
     user_id : {
         type:mongoose.Schema.Types.ObjectId,
-     }
+     },
+     refresh_token: String
 });
 
 const newDb = mongoose.connection.useDb("EcommerceDb") 

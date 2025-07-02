@@ -2,6 +2,7 @@ import api from "../api"
 import { useState , useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import React from "react";
+import Navigationbar from "../components/navigationbar";
 import Sidebar from "../components/Sidebar"
 import Maincontent from "../components/Maincontent";
 import Income from "../components/income";
@@ -20,6 +21,8 @@ function Home(){
     const [toggleSidebar , settoggleSidebar] = useState(false)
     const [toggleMain, setTogglemain] = useState("maincontent")
     const [incomeForm, setincomeForm] = useState(null)
+    const [sidebarButton, setsidebarButton] = useState(false)
+    const [profileToggle,setprofileToggle] = useState(false)
     const navigate = useNavigate()
 
     const logout=async()=>{
@@ -74,21 +77,12 @@ function Home(){
             return 
         }
     }
-    const sidebarDisplay=()=>{
-        switch(toggleMain){
-            case "maincontent":
-                return <Maincontent Transactions={transactions} formatDate={formatDate} mainContent={setTogglemain}/>
-            case "income":
-                return <Income incomes={transactions.allIncome} incomebyCategory={transactions.allincomeCategory} formatDate={formatDate} setIncome={setincomeForm}/>
-            case "expenses":
-                return <Expenses expenses={transactions.allExpense} expensebyCategory={transactions.allexpenseCategory} formatDate={formatDate} setExpense={setincomeForm}/>
-        }
-    }
 
     const getTransactions = async()=>{
         try{
         const response = await api.get('/transactions')
         const transaction = await response.data
+        console.log(transaction)
         if(transaction){
             settransactions(transaction)
             setauth(true)
@@ -130,26 +124,34 @@ function Home(){
     if(auth == null){
         return <div class="flex justify-center h-screen items-center animate-pulse"><p> LOADING....</p></div>
     }
-   return (auth ? 
-        <main class=" h-screen w-full flex justify-center bg-gray-100 relative">
-      {incomeForm!==null && <IncomeExpenseform setincomeForm={setincomeForm} type={incomeForm} getTransactions={getTransactions}/>}
-      {confirmationMessage && <Confirmationmessage logout={logout} setConfirmationmessage={setConfirmationmessage}/>}
-            <div class = "w-full flex flex-col md:gap-2 gap-0">
-            <div class = "h-[55px] p-2 text-left font-bold w-full shadow-sm items-center flex gap-2 bg-white">
-                <i onClick= {rollSidebar} class="md:!hidden fa-solid fa-bars p-1"></i>
-                <h1>Expense Tracker</h1>
-                </div>   
-            <div class = "flex w-full flex-grow shadow-md p-1 relative gap-4">
-            <Sidebar toggleSidebar={toggleSidebar} setTogglemain={setTogglemain} 
-            toggleMain={toggleMain}
-             settoggleSidebar={settoggleSidebar}
-            setConfirmationMessage={setConfirmationmessage}/>
-            {sidebarDisplay()}
-            </div>
-            </div>
-        </main>
-         : <Navigate to= "/login"/>
-)
+   return (
+    <main className="relative flex flex-col items-center gap-2 h-screen">
+        {sidebarButton && <Navigationbar setsidebarButton={setsidebarButton} sidebarButton={sidebarButton}></Navigationbar>}
+    <nav className=" bg-amber-300 h-[50px] flex  justify-between w-full items-center p-2">
+        <div className="flex md:gap-0 gap-1">
+        <button onClick = {()=>{setsidebarButton(!sidebarButton)}}className=""><i class="fa-solid fa-bars md:!hidden"></i></button>
+        <p className="font-bold">Ecommerce</p>
+        </div>
+            <div className="font-bold hidden md:gap-5 gap-2 justify-center md:flex">
+        <p onClick={()=>{navigate("/admin")}}>Home</p>
+        <p>Men</p>
+        <p>Women</p>
+        <p>Accessories</p>
+        <p>Footwear</p>
+        <p>Search</p>
+    </div>
+        <div className="flex gap-2 font-bold ">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <i onClick={()=>{setprofileToggle(!profileToggle)}} class="fa-solid fa-circle text-lg"></i>
+    </div>
+    </nav>
+    {profileToggle && <div className="absolute h-[60px] w-[100px] top-10 right-0 z-20 bg-gray-100
+     flex flex-col font-bold p-2 rounded-md gap-2">
+        <nav><i class="fa-solid fa-user"></i> Profile</nav>
+        <p><i class="fa-solid fa-right-from-bracket"></i> Logout</p>
+    </div>}
+    </main>
+   )
 };
 
 export default Home;
