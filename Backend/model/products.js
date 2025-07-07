@@ -32,5 +32,11 @@ const productsSchema = new schema({
     timestamps: true
 }
 )
-const newDb = mongoose.connection.useDb("EcommerceDb") 
-module.exports = newDb.model('Product',productsSchema)
+
+productsSchema.pre('save',function(){
+    if(this.discounted_price == null){
+        this.discounted_price = this.Price
+    }
+    next()
+})
+module.exports = mongoose.model('Product',productsSchema)

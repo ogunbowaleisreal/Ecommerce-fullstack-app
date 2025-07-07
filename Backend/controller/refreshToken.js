@@ -3,13 +3,14 @@ const jwt = require('jsonwebtoken')
 const USER = require('../model/User')
 
 const refreshTokenController= async(req,res)=>{
-
     try{
+        console.log('refresh route was hit')
     const cookies = req.cookies
     const token = cookies.jwt_refresh
     console.log(token)
         const dbToken = await USER.findOne({refresh_token : token})
-    if(dbToken){
+    if(dbToken && dbToken.refresh_token == token){
+        console.log(`got here and here is the sent token ${token} and db token ${dbToken.refresh_token}`)
     const decoded = jwt.verify(
         token,
         process.env.REFRESH_TOKEN_SECRET)

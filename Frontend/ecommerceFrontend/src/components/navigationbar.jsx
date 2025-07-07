@@ -6,7 +6,7 @@ export default function Navigationbar({setsidebarButton,sidebarButton}){
   const navigate = useNavigate()
   return (
     <section className={`absolute inset-0 bg-black/50 flex h-full z-50 w-full md:hidden ${sidebarButton ? "": "hidden"}`}>
-    <div className='w-3/4 bg-amber-200 h-full p-2 gap-2 '>
+    <div className='w-3/4 bg-white h-full p-2 gap-2 '>
     <div className='flex gap-1'>
         <button onClick={()=>{setsidebarButton(!sidebarButton)}}><i class="fa-solid fa-xmark"></i></button>
     </div>

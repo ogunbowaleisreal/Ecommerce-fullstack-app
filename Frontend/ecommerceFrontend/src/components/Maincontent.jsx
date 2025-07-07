@@ -12,7 +12,6 @@ export default function Maincontent({productForm,setproductForm}) {
     try{
     const response = await api.get('/admin')
     const allproducts = response.data
-    console.log(allproducts)
     setProducts(allproducts)
   }catch(err){
     console.log(err)
@@ -21,20 +20,21 @@ export default function Maincontent({productForm,setproductForm}) {
   useEffect(()=>{getProducts()},[])
 
     if(products == null){
-    return <div>Loading</div>
+    return <div className='flex justify-center items-center w-full h-full animate-pulse'>
+      <p>LOADING...</p>
+    </div>
   }
-console.log(products)
       return (
         <section className='bg-gray-200 w-full h-full flex flex-col gap-2 p-2'>
         <div className='flex text-white'>
           <button onClick={()=>{setproductForm(!productForm)}} className='bg-blue-950 ml-auto p-2 rounded-md'><i class="fa-solid fa-plus"></i> Add new product</button>
         </div>
-        <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2 h-[calc(100vh-115px)] font-bold overflow-y-auto'>
+        <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 h-[calc(100vh-114px)] font-bold overflow-y-scroll'>
           {products.map((item)=>
-            <div key={item._id} className='flex flex-col rounded-md gap=1'>
-              <img className ="rounded-md h-auto w-full" src={item.image_url} alt={item.category}></img>
-              <p className='text-lg'>{item.product_name}</p>
-              <p className='font-extrabold'>${item.Price}</p>
+            <div key={item._id} className='flex flex-col rounded-md bg-white text-blue-950 p-2'>
+              <img className ="rounded-md object-cover h-auto w-full" src={item.image_url} alt={item.category}></img>
+              <p className='text-sm md:text-lg'>{item.product_name}</p>
+              <p className=' md:font-extrabold'>${item.Price}</p>
             </div>
             )}
         </div>

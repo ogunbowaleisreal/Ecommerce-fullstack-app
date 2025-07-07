@@ -12,11 +12,18 @@ const getcartItems = async(req,res)=>{
     try{
     const cart_id = req.user_id
     const cart = await CART.findOne({user_id: cart_id},{Products: 1}).populate("Products.product_id")
-
+    let totalPrice = 0
+    
     if(cart && cart.Products.length > 0){
-        return res.status(200).json({cart})
+        for(const items of cart.Products){
+            const product = await PRODUCTS.findOne({_id:items.product_id})
+            if(product){
+                totalPrice+= product.Price
+            }
+        }
+        return res.status(200).json({cart,totalPrice})
     }
-    return res.status(200).json({"message":"no items in cart yet"})
+    return res.status(404).json({"message":"no items in cart yet"})
 }catch(err){
     console.log(err)
     return res.status(500).json({"message": "internal server error"})
@@ -24,7 +31,6 @@ const getcartItems = async(req,res)=>{
 }
 
 const createoraddCart = async(req,res)=>{
-
     try{   
     const user_id = req.user_id
     const product_id = req.body.product_id
@@ -96,14 +102,13 @@ const createOrder = async(req,res)=>{
     let total = 0
     for (const item of products){
         const product = await PRODUCTS.findById(item.product_id)
-        if(product.length !== 0 && product.discounted_price){
+        if(product && product.discounted_price !== product.Price){
             const price = product.discounted_price
             const quantity = item.quantity
             total = total + price*quantity
             orderItems.push({"product_id":item.product_id,
                  "quantity":quantity, 
                  "price":price})
-            continue
         }
         else if (product){
             const price = product.Price
@@ -111,9 +116,14 @@ const createOrder = async(req,res)=>{
             total+= price*quantity
             orderItems.push({"product_id":item.product_id,
                  "quantity":quantity, "price":price})
+        }else{
+            continue
         }
     }
-    console.log(orderItems)
+    if(orderItems.length == 0){
+    return res.status(404).json({"message":"products not found"})
+    }
+        console.log(orderItems)
     const order = await ORDERS.create({user_id:user_id,products:orderItems,totalAmount:total,})
     if(order){
         return res.status(200).json({"message":"order successfully made"})
@@ -140,26 +150,28 @@ const getuserOrders=async(req,res)=>{
 }
 
 const increaseproductQuantity=async(req,res)=>{
-    const product_id = req.body.id
-    const quantity = req.body.quantity
-    const user_id = req.user_id
+    const product_id = req.body.product_id;
+    const type = req.body.type;
+    const user_id = req.user_id;
     const cart = await CART.findOne({user_id:user_id})
     const product = await PRODUCTS.findById(product_id)
-    if(!product || !quantity){
+    if(!product){
         return res.status(404).json({"message":"product not found"})
     }
     const stockQuantity = product.quantity
     try{
-        if(quantity <= stockQuantity){
             for(const item of cart.Products){
             if(item.product_id.equals(product_id)){
-                item.quantity = quantity
+                if(item.quantity+1 <= stockQuantity && item.quantity-1 > 0){
+                type == "increase"? item.quantity += 1: item.quantity -= 1;
                 await cart.save()
-                return res.status(200).json({"message": "stock updated"})
+                const newQuantity = item.quantity +=1
+                return res.status(200).json({"message": "stock updated","newQuantity":newQuantity})
             }
+            return res.status(403).json({"message":"Not Allowed "})
         }
         }
-        return res.status(403).json({"message":"quantity exceeds stock amount"})
+        return res.status(404).json({"message":"product not found"})
     }catch(err){
         console.log(err)
         return res.status(500).json({"message":"internal server error"})

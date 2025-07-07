@@ -34,6 +34,8 @@ app.use('/logout', require("./router/logout"));
 
 app.use('/cart', require("./router/cart"));
 
+app.use('/orders', require("./router/order"));
+
 app.use('/shop', require('./router/shop_routes'));
 
 app.use('/register', require('./router/register'));

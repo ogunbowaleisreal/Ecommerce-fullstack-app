@@ -8,7 +8,7 @@ const {getcartItems,deletecartItem,createoraddCart,increaseproductQuantity} = re
 router.route("/")
     .get(jwtVerify,getcartItems)
     .post(jwtVerify,createoraddCart)
-    .patch(jwtVerify,)
+    .patch(jwtVerify,increaseproductQuantity)
 
 router.route("/:id")
       .get(jwtVerify)

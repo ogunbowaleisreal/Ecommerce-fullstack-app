@@ -11,7 +11,7 @@ const cartSchema = new schema({
         product_id:{
         type:mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: "products"
+        ref: "Product"
     },
     quantity:{
         type: Number,
@@ -20,5 +20,4 @@ const cartSchema = new schema({
     }]
 })
 
-const newDb = mongoose.connection.useDb("EcommerceDb") 
-module.exports = newDb.model('Cart',cartSchema)
+module.exports = mongoose.model('Cart',cartSchema)

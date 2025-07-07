@@ -1,14 +1,15 @@
 import api from "../api"
 import { useState , useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
 import React from "react";
 import Navigationbar from "../components/navigationbar";
 import Sidebar from "../components/Sidebar"
 import Maincontent from "../components/Maincontent";
-import Income from "../components/income";
-import Expenses from "../components/expenses";
-import IncomeExpenseform from "../components/incomeExpenseform";
 import Confirmationmessage from "../components/confirmationMessage";
+import Cart from "../components/cart";
+import Shopbycontent from "../components/shopbycontent";
+import Featuredproducts from "../components/featuredproducts";
+
 
 function Home(){
     const [transactions , settransactions] = useState(null);
@@ -21,6 +22,7 @@ function Home(){
     const [toggleSidebar , settoggleSidebar] = useState(false)
     const [toggleMain, setTogglemain] = useState("maincontent")
     const [incomeForm, setincomeForm] = useState(null)
+    const [cart,toggleCart] = useState(false)
     const [sidebarButton, setsidebarButton] = useState(false)
     const [profileToggle,setprofileToggle] = useState(false)
     const navigate = useNavigate()
@@ -120,36 +122,36 @@ function Home(){
 
   return `${day}${suffix} ${month} ${year}`;
 }
+const Category = ["Home","Products","Men","Women","Kids","Footwear"]
     useEffect(()=>{getTransactions()},[])
     if(auth == null){
         return <div class="flex justify-center h-screen items-center animate-pulse"><p> LOADING....</p></div>
     }
    return (
-    <main className="relative flex flex-col items-center gap-2 h-screen">
+    <main className="relative flex flex-col h-screen bg-gray-300">
+        {cart&& <Cart cart={cart} toggleCart={toggleCart}></Cart>}
         {sidebarButton && <Navigationbar setsidebarButton={setsidebarButton} sidebarButton={sidebarButton}></Navigationbar>}
-    <nav className=" bg-amber-300 h-[50px] flex  justify-between w-full items-center p-2">
+    <nav className=" bg-white h-[50px] xl:h-[80px] flex  justify-between w-full items-center p-2">
         <div className="flex md:gap-0 gap-1">
         <button onClick = {()=>{setsidebarButton(!sidebarButton)}}className=""><i class="fa-solid fa-bars md:!hidden"></i></button>
         <p className="font-bold">Ecommerce</p>
         </div>
-            <div className="font-bold hidden md:gap-5 gap-2 justify-center md:flex">
-        <p onClick={()=>{navigate("/admin")}}>Home</p>
-        <p>Men</p>
-        <p>Women</p>
-        <p>Accessories</p>
-        <p>Footwear</p>
-        <p>Search</p>
+            <div className="font-bold hidden md:gap-5 gap-2 justify-center rounded-md md:flex">
+                {Category.map((item)=>{
+                    return <p className="hover:bg-gray-300 p-1 rounded-md" onClick={()=>{navigate("/admin")}}>{item}</p>
+                })}
     </div>
-        <div className="flex gap-2 font-bold ">
-        <i class="fa-solid fa-cart-shopping"></i>
-        <i onClick={()=>{setprofileToggle(!profileToggle)}} class="fa-solid fa-circle text-lg"></i>
+        <div className="flex font-bold items-center">
+        <i onClick={()=>{toggleCart(!cart)}} class="fa-solid fa-cart-shopping text-lg p-2 hover:bg-gray-300 rounded-full"></i>
+        <i onClick={()=>{setprofileToggle(!profileToggle)}} class="fa-solid fa-circle text-lg p-2 hover:bg-gray-300 rounded-full"></i>
     </div>
     </nav>
-    {profileToggle && <div className="absolute h-[60px] w-[100px] top-10 right-0 z-20 bg-gray-100
-     flex flex-col font-bold p-2 rounded-md gap-2">
+    {profileToggle && <div className="absolute h-[80px] w-[100px] p-2 top-10 right-0 z-20 bg-gray-50
+     flex flex-col font-bold rounded-md gap-2">
         <nav><i class="fa-solid fa-user"></i> Profile</nav>
         <p><i class="fa-solid fa-right-from-bracket"></i> Logout</p>
     </div>}
+    <Outlet/>
     </main>
    )
 };

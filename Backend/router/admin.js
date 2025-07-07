@@ -9,21 +9,16 @@ router.route('/')
       .get(jwtVerify,verifyRoles(ROLES_LIST.Admin),getallProducts)
       .post(jwtVerify,verifyRoles(ROLES_LIST.Admin),createProduct)
 
-router.route('/:id')
-      .get(jwtVerify,verifyRoles(ROLES_LIST.Admin),productDetails)
-      .patch(jwtVerify,verifyRoles(ROLES_LIST.Admin),updateProduct)
-      .delete(jwtVerify,verifyRoles(ROLES_LIST.Admin),deleteProduct)
-      
-router.route('/order')
-      .get(jwtVerify,verifyRoles(ROLES_LIST.Admin),getOrders)
-
-router.route('/order/:id')
-      .get(jwtVerify,verifyRoles(ROLES_LIST.Admin),orderDetails)
-      .patch(jwtVerify,verifyRoles(ROLES_LIST.Admin),updateOrder)      
-
 router.route('/users')
       .get(jwtVerify,verifyRoles(ROLES_LIST.Admin),getallUsers)
       .post(jwtVerify,verifyRoles(ROLES_LIST.Admin),createUser)
+
+      
+router.route('/:id')
+      .get(jwtVerify,verifyRoles(ROLES_LIST.Admin),productDetails)
+      .patch(jwtVerify,verifyRoles(ROLES_LIST.Admin),updateProduct)
+      .delete(jwtVerify,verifyRoles(ROLES_LIST.Admin),deleteProduct)      
+
 
 
 module.exports= router
