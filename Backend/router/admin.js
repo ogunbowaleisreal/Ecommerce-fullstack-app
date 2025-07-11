@@ -4,10 +4,11 @@ const {createProduct,createUser,updateOrder,updateProduct,deleteProduct,getOrder
 const jwtVerify = require('../middleware/verifyJwt')
 const ROLES_LIST = require('../config/rolesList')
 const verifyRoles= require('../middleware/verifyRoles')
+const upload = require('../config/multerconfig');
 
 router.route('/')
       .get(jwtVerify,verifyRoles(ROLES_LIST.Admin),getallProducts)
-      .post(jwtVerify,verifyRoles(ROLES_LIST.Admin),createProduct)
+      .post(jwtVerify,verifyRoles(ROLES_LIST.Admin),upload.single('image_url'),createProduct)
 
 router.route('/users')
       .get(jwtVerify,verifyRoles(ROLES_LIST.Admin),getallUsers)

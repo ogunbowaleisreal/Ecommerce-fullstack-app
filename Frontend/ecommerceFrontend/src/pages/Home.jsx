@@ -3,12 +3,15 @@ import { useState , useEffect } from "react";
 import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
 import React from "react";
 import Navigationbar from "../components/navigationbar";
+import { useSelector,useDispatch } from "react-redux";
 import Sidebar from "../components/Sidebar"
 import Maincontent from "../components/Maincontent";
 import Confirmationmessage from "../components/confirmationMessage";
 import Cart from "../components/cart";
+import Productview from "../components/productview";
 import Shopbycontent from "../components/shopbycontent";
 import Featuredproducts from "../components/featuredproducts";
+import Success from "../components/error/success";
 
 
 function Home(){
@@ -20,15 +23,15 @@ function Home(){
     const [edit, setedit]= useState(false)
     const [Id,setId] = useState("")
     const [toggleSidebar , settoggleSidebar] = useState(false)
-    const [toggleMain, setTogglemain] = useState("maincontent")
-    const [incomeForm, setincomeForm] = useState(null)
     const [cart,toggleCart] = useState(false)
     const [sidebarButton, setsidebarButton] = useState(false)
     const [profileToggle,setprofileToggle] = useState(false)
+    const dispatch = useDispatch()
     const navigate = useNavigate()
+    const value = useSelector(state=> state.error.value)
+    const toggle = useSelector(state=> state.error.toggle)
 
     const logout=async()=>{
-
         try{
             const response = await api.get("/logout")
             if(response.status== 200){
@@ -122,7 +125,13 @@ function Home(){
 
   return `${day}${suffix} ${month} ${year}`;
 }
-const Category = ["Home","Products","Men","Women","Kids","Footwear"]
+const Category = [
+    {"link":"Home", "to":"/admin"},
+    {"link":"Products","to":"allproducts"}
+    ,{"link":"Men","to":"men"},
+    {"link":"Women","to":"women"},
+    {"link":"Kids","to":"kids"}
+    ,{"link":"Footwear","to":"footwear"}]
     useEffect(()=>{getTransactions()},[])
     if(auth == null){
         return <div class="flex justify-center h-screen items-center animate-pulse"><p> LOADING....</p></div>
@@ -130,15 +139,17 @@ const Category = ["Home","Products","Men","Women","Kids","Footwear"]
    return (
     <main className="relative flex flex-col h-screen bg-gray-300">
         {cart&& <Cart cart={cart} toggleCart={toggleCart}></Cart>}
+        {<Productview></Productview>}
+        {toggle && <Success error={value}></Success>}
         {sidebarButton && <Navigationbar setsidebarButton={setsidebarButton} sidebarButton={sidebarButton}></Navigationbar>}
-    <nav className=" bg-white h-[50px] xl:h-[80px] flex  justify-between w-full items-center p-2">
+    <nav className=" bg-white h-[50px] border-b-1 xl:h-[70px] flex  justify-between w-full items-center p-2">
         <div className="flex md:gap-0 gap-1">
         <button onClick = {()=>{setsidebarButton(!sidebarButton)}}className=""><i class="fa-solid fa-bars md:!hidden"></i></button>
         <p className="font-bold">Ecommerce</p>
         </div>
             <div className="font-bold hidden md:gap-5 gap-2 justify-center rounded-md md:flex">
-                {Category.map((item)=>{
-                    return <p className="hover:bg-gray-300 p-1 rounded-md" onClick={()=>{navigate("/admin")}}>{item}</p>
+                {Category.map((item,index)=>{
+                    return <Link to={item.to} key={index} ><p className="hover:bg-gray-300 p-1 rounded-md">{item.link}</p></Link>
                 })}
     </div>
         <div className="flex font-bold items-center">

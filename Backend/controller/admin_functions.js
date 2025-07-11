@@ -2,24 +2,27 @@ const PRODUCTS = require('../model/products');
 const ORDERS = require('../model/orders');
 const USERS = require('../model/User');
 const REVIEW = require('../model/reviews');
+const cloudinary = require('../config/cloudinary')
 
 const createProduct=async (req,res)=>{
  
     try{
-
     const {product_name,category,Price,discounted_price,quantity,description} = req.body
-    
+    const result = await cloudinary.uploader.upload(req.file.path,
+        {folder:'products_images'}
+    )
     const newProduct = await PRODUCTS.create({
      product_name:product_name,
      category : category,
      Price :Price,
      discounted_price :discounted_price,
      quantity :quantity,
-     description :description
+     description :description,
+     image_url: result.secure_url
     })
     console.log(newProduct)
     if(newProduct){
-        return res.status(200).send("New Product added successfully")
+        return res.status(200).json({"message":"New Product added successfully"})
     }
 }catch(err){
     console.log(err.message)

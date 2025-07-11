@@ -1,6 +1,4 @@
 import React from 'react'
-import Piecharts from './piecharts'
-import Barchart from "../components/barchart";
 import { useState,useEffect } from 'react';
 import api from '../api';
 

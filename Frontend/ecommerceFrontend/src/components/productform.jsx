@@ -6,19 +6,23 @@ import api from "../api"
 export default function Productform({productForm,setproductForm}){
     const[category,setCategory]=useState("")
     const[Amount,setAmount] = useState("")
+      const [image, setImage] = useState(null)
     const [formData, setFormData] = useState({"product_name":"","price":"","discounted_price":"",
-    "category":"","quantity":"","image_url":"","description":""})
+    "category":"","quantity":"","description":"",'image_url': image})
     const[error,setError]=useState(false)
+  
 
       const handleChange = (e)=>{
-        const {name,value} = e.target;
-    
+        const {name,value,type,files} = e.target;
+        if(type == 'file'){
+          setImage(files[0])
+        }else{
         setFormData((formData)=>(
           {...formData, [name]:value}
         ))
         setTimeout(()=>{setError(null)},3000)
       }
-
+    }
       const handleSubmit=async()=>{
         try{
             const response = await api.post('/admin',formData)
@@ -42,11 +46,10 @@ export default function Productform({productForm,setproductForm}){
         <p className='text-base font-bold text-blue-950 mb-auto'>Add new product</p>
         <i onClick={()=>{setproductForm(!productForm)}} class="fa-solid fa-xmark ml-auto mb-auto rounded-full hover:bg-gray-200 p-3"></i>
         </div>
-        <form onSubmit={handleSubmit} className='flex flex-col gap-2 text-sm justify-center h-full'>
+        <form onSubmit={handleSubmit} encType='multipart/form-data' className='flex flex-col gap-2 text-sm justify-center h-full'>
           <label className='font-bold w-full'>
             Upload Image
-          <input type='file' name='image_url' onChange={handleChange}
-           value={formData.image_url} className='border-1 h-[80px] rounded-md w-full p-1'
+          <input type='file' name='image_url' onChange={handleChange} className='border-1 h-[80px] rounded-md w-full p-1'
             placeholder='input product name'></input>
           </label>
           <label className='font-bold'>

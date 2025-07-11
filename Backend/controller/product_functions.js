@@ -18,7 +18,7 @@ const getcartItems = async(req,res)=>{
         for(const items of cart.Products){
             const product = await PRODUCTS.findOne({_id:items.product_id})
             if(product){
-                totalPrice+= product.Price
+                totalPrice+= (product.Price * items.quantity)
             }
         }
         return res.status(200).json({cart,totalPrice})
@@ -34,10 +34,6 @@ const createoraddCart = async(req,res)=>{
     try{   
     const user_id = req.user_id
     const product_id = req.body.product_id
-    const quantity = req.body.quantity
-    if (isNaN(quantity) || quantity <= 0){
-       return res.status(400).json({ message: "Invalid quantity" });
-  }
     const cart = await CART.findOne({user_id:user_id})
     const product = await PRODUCTS.findOne({_id: product_id})
         if (!product) {
@@ -49,8 +45,8 @@ const createoraddCart = async(req,res)=>{
     for(const items of cart.Products){
 
         if(items.product_id.equals(product_id)){
-            if(items.quantity + quantity<= stockQuantity){
-        items.quantity += quantity
+            if(items.quantity + 1<= stockQuantity){
+        items.quantity += 1
         await cart.save()
         return res.status(200).json({"message":"product added to cart"})
             }
@@ -58,17 +54,18 @@ const createoraddCart = async(req,res)=>{
         }
     }
     // item is not already in cart but cart contains other items
-    if(quantity<= stockQuantity){
-     cart.Products.push({product_id: product_id, quantity:quantity})
+    if(stockQuantity >= 1){
+     cart.Products.push({product_id: product_id, quantity:1})
     await cart.save()
+    return res.status(200).json({ cart, message: "product added to cart" });
     }
      return res.status(403).json({"message":"quantity exceeds available stock"})
     }else{
         //there isnt any cart for the user , new one has to be created
-    if(quantity<= stockQuantity){        
-        const newCart = await CART.create({user_id: user_id,Products:[{product_id: product_id, quantity:quantity}]})
+    if(stockQuantity >= 1){        
+        const newCart = await CART.create({user_id: user_id,Products:[{product_id: product_id, quantity:1}]})
         if(newCart){
-            return res.status(200).json({"message":" cart created and first item added"})
+            return res.status(200).json({"cart":newCart,"message":" cart created and first item added"})
         }
     } return res.status(403).json({"message":"quantity exceeds available stock"})
     }
@@ -155,21 +152,33 @@ const increaseproductQuantity=async(req,res)=>{
     const user_id = req.user_id;
     const cart = await CART.findOne({user_id:user_id})
     const product = await PRODUCTS.findById(product_id)
+
+    if(!cart){
+        return res.status(404).json({"message":"cart not found"})
+    }
+
     if(!product){
         return res.status(404).json({"message":"product not found"})
     }
     const stockQuantity = product.quantity
+    console.log(stockQuantity)
     try{
             for(const item of cart.Products){
             if(item.product_id.equals(product_id)){
-                if(item.quantity+1 <= stockQuantity && item.quantity-1 > 0){
-                type == "increase"? item.quantity += 1: item.quantity -= 1;
+                if(type == "increase" && item.quantity+1 <= stockQuantity){ 
+                item.quantity += 1
                 await cart.save()
-                const newQuantity = item.quantity +=1
-                return res.status(200).json({"message": "stock updated","newQuantity":newQuantity})
+                return  res.status(200).json({"message":"added one "});
+                }
+                if(type == "decrease"){
+                    if(item.quantity>1){
+                        item.quantity -= 1
+                        await cart.save()
+                   return  res.status(200).json({"message":"removed one"});
+                    }
+                    return res.status(403).json({"message":"Not Allowed "})
+                }
             }
-            return res.status(403).json({"message":"Not Allowed "})
-        }
         }
         return res.status(404).json({"message":"product not found"})
     }catch(err){

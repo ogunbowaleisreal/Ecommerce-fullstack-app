@@ -8,7 +8,6 @@ import Maincontent from '../components/Maincontent.jsx';
 import Productform from '../components/productform.jsx';
 import Success from '../components/error/success.jsx';
 import Orders from '../components/orders.jsx';
-import Products from '../components/products.jsx';
 
 export default function Admindashboard({productForm, setproductForm}) {
   const navigate = useNavigate()
@@ -29,18 +28,6 @@ export default function Admindashboard({productForm, setproductForm}) {
         }
     }
 
-    const currentContent = ()=>{
-      switch (content){
-        case 'dashboard':
-           return <Maincontent productForm={productForm} setproductForm={setproductForm}></Maincontent>;
-        case 'orders':
-          return <Orders></Orders>;
-        case 'products':
-          return <Products></Products>;
-        default:
-          return <Maincontent productForm={productForm} setproductForm={setproductForm}></Maincontent>;
-      }
-    }
   const getProducts = async()=>{
 
     try{

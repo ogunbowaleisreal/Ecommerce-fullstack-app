@@ -9,9 +9,10 @@ import Admindashboard from "./pages/admindashboard"
 import React from "react";
 import Cart from "./components/cart";
 import Orders from "./components/orders";
-import Products from "./components/products"
+import Products from "./components/adminproducts"
 import Maincontent from "./components/Maincontent";
-import Shopmaincontent from "./components/shopmainContent"
+import Shopmaincontent from "./components/shopmainContent";
+import AllProducts from "./components/products"
 
 function Registerlogout(){
     return <Register/>
@@ -32,6 +33,7 @@ function App(){
         <Route path = '/' element = {<ProtectedRoute route="home"><Home/></ProtectedRoute>}>
         <Route index element={<Shopmaincontent/>}></Route>
         <Route path = 'cart' element = {<Cart/>}/>
+        <Route path = 'allproducts' element = {<AllProducts/>}/>
         <Route path='shop' index element={<Shopmaincontent/>}></Route>
         </Route>
         <Route path= '*' element = {<Notfound/>}/>

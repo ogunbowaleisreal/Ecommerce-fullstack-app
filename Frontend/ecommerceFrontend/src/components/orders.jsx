@@ -1,5 +1,4 @@
 import React from 'react'
-import Barchart from './barchart'
 import { useEffect, useState } from 'react'
 import api from '../api'
 
