@@ -13,8 +13,7 @@ router.route('/')
 router.route('/users')
       .get(jwtVerify,verifyRoles(ROLES_LIST.Admin),getallUsers)
       .post(jwtVerify,verifyRoles(ROLES_LIST.Admin),createUser)
-
-      
+     
 router.route('/:id')
       .get(jwtVerify,verifyRoles(ROLES_LIST.Admin),productDetails)
       .patch(jwtVerify,verifyRoles(ROLES_LIST.Admin),updateProduct)

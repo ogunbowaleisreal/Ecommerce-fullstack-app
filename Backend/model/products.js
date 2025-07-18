@@ -15,7 +15,7 @@ const productsSchema = new schema({
     },
     category:{ 
         type:String,
-        enum:["Men","Women","Kids","Eletronics","Phones","Gaming","Footwear","Food"],
+        enum:["Men","Women","Kids","Electronics","Phones","Gaming","Footwear","Food"],
         required:true
     },
     quantity:{
@@ -33,7 +33,7 @@ const productsSchema = new schema({
 }
 )
 
-productsSchema.pre('save',function(){
+productsSchema.pre('save',function(next){
     if(this.discounted_price == null){
         this.discounted_price = this.Price
     }

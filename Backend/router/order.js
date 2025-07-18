@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {createProduct,createUser,updateOrder,updateProduct,deleteProduct,getOrders,getallProducts, productDetails,orderDetails,getallUsers} = require('../controller/admin_functions');
+const {updateOrder,getOrders,orderDetails} = require('../controller/admin_functions');
 const {createOrder} = require('../controller/product_functions');
 const jwtVerify = require('../middleware/verifyJwt');
 const ROLES_LIST = require('../config/rolesList');

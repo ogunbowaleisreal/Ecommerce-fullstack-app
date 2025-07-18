@@ -1,11 +1,15 @@
 import {Navigate, useNavigate} from 'react-router-dom';
-import api from '../api';
 import { useState, useEffect } from 'react';
+import useAxios from '../api';
+import useAuth from '../useAuth';
 import React from 'react';
 
-function ProtectedRoute({route,children}){
 
+function ProtectedRoute({route,children}){
+    const api = useAxios()
+  const { accessToken, setAccessToken } = useAuth();
     const [authorized, setauthorized] = useState(null)
+
     const auth= async ()=>{
         try{
         const response = await api.get('/verify')
@@ -18,7 +22,6 @@ function ProtectedRoute({route,children}){
                 return
             }  
     }catch(err){
-        console.log(err)
         setauthorized(false)
     }
     }

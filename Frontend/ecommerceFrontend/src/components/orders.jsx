@@ -1,9 +1,10 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
-import api from '../api'
+import useAxios from '../api'
 
 export default function Orders({}){
   const [orders, setOrders] = useState(null)
+  const api = useAxios()
 
   const getorders =async ()=>{
     try{

@@ -8,16 +8,17 @@ import Maincontent from '../components/Maincontent.jsx';
 import Productform from '../components/productform.jsx';
 import Success from '../components/error/success.jsx';
 import Orders from '../components/orders.jsx';
+import { useDispatch, useSelector } from 'react-redux';
 
-export default function Admindashboard({productForm, setproductForm}) {
+export default function Admindashboard({productForm, setproductForm,products,setProducts}) {
   const navigate = useNavigate()
-  const [products, setProducts] = useState(null)
   const [sideBar,setsideBar] = useState(false)
   const [content, setContent] = useState('dashboard')
   const [error, seterror] = useState(false)
-  
+  const toggle = useSelector((state)=>state.error.toggle)
+  const value= useSelector((state)=>state.error.value)
+ 
     const logout=async()=>{
-
         try{
             const response = await api.get("/logout")
             if(response.status== 200){
@@ -53,8 +54,9 @@ export default function Admindashboard({productForm, setproductForm}) {
   }
   return (
     <main className='flex flex-col bg-gray-100 h-screen relative'>
-      {error && <Success error = {error}></Success>}
-      {productForm && <Productform productForm={productForm} setproductForm = {setproductForm}></Productform>}
+      {toggle && <Success error={value}></Success>}
+      {productForm && <Productform productForm={productForm} setproductForm = {setproductForm}
+       setProducts={setProducts} products={products} ></Productform>}
         <div className='flex h-full'>
           <Sidebar sideBar={sideBar} setsideBar={setsideBar}></Sidebar>
         <div className='flex flex-col w-full'>

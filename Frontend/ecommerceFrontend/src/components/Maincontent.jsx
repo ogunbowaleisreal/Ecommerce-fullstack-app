@@ -1,10 +1,9 @@
 import React from 'react'
 import { useState,useEffect } from 'react';
-import api from '../api';
+import useAxios from '../api';
 
-
-export default function Maincontent({productForm,setproductForm}) {
-  const [products, setProducts] = useState()
+export default function Maincontent({productForm,setproductForm,products,setProducts}) {
+  const api = useAxios()
 
   const getProducts = async()=>{
     try{
@@ -13,8 +12,8 @@ export default function Maincontent({productForm,setproductForm}) {
     setProducts(allproducts)
   }catch(err){
     console.log(err)
-  }
-  }
+  }}
+
   useEffect(()=>{getProducts()},[])
 
     if(products == null){
@@ -29,8 +28,8 @@ export default function Maincontent({productForm,setproductForm}) {
         </div>
         <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 h-[calc(100vh-114px)] font-bold overflow-y-scroll'>
           {products.map((item)=>
-            <div key={item._id} className='flex flex-col rounded-md bg-white text-blue-950 p-2'>
-              <img className ="rounded-md object-cover h-auto w-full" src={item.image_url} alt={item.category}></img>
+            <div key={item._id} className='hover:bg-gray-300 flex flex-col rounded-md bg-white text-blue-950 p-2'>
+              <img className ="rounded-md object-cover h-[200px] w-full" src={item.image_url} alt={item.category}></img>
               <p className='text-sm md:text-lg'>{item.product_name}</p>
               <p className=' md:font-extrabold'>${item.Price}</p>
             </div>

@@ -8,8 +8,8 @@ const getallfeaturedProducts=async(req,res)=>{
 }
 
 const getcartItems = async(req,res)=>{
-
     try{
+
     const cart_id = req.user_id
     const cart = await CART.findOne({user_id: cart_id},{Products: 1}).populate("Products.product_id")
     let totalPrice = 0
@@ -19,9 +19,14 @@ const getcartItems = async(req,res)=>{
             const product = await PRODUCTS.findOne({_id:items.product_id})
             if(product){
                 totalPrice+= (product.Price * items.quantity)
+            }else{
+                console.log(product)
+                cart.Products = cart.Products.filter((item)=>item.product_id !== null)
+                console.log(cart.Products)
             }
         }
-        return res.status(200).json({cart,totalPrice})
+        await cart.save()
+        return res.status(200).json({cart,totalPrice,"status":200})
     }
     return res.status(404).json({"message":"no items in cart yet"})
 }catch(err){
@@ -77,9 +82,21 @@ const createoraddCart = async(req,res)=>{
 
 const getbyFilter=async(req,res)=>{
     try{
-
-    const userFilter = req.body.filter
-    const products = await PRODUCTS.find({category:{$in: userFilter}})
+        const userFilter = req.body.newFilter
+        let bodyFilter = []
+        console.log(userFilter)
+        console.log(Object.entries(userFilter))
+        for(const item of Object.entries(userFilter)){
+            if(item[1]){
+                bodyFilter.push(item[0])
+            }
+        }
+        if(bodyFilter.length == 0){
+            const products = await PRODUCTS.find({}).sort({createdAt:-1})
+            return res.status(200).json(products)
+        }
+        console.log(bodyFilter)
+    const products = await PRODUCTS.find({category:{$in: bodyFilter}}).sort({createdAt:-1})
     if(products.length !== 0){
         return res.status(200).json(products)
     }
@@ -91,7 +108,6 @@ const getbyFilter=async(req,res)=>{
 }
 
 const createOrder = async(req,res)=>{
-
     try{
     const user_id = req.user_id
     const products= req.body.productsarray
@@ -150,7 +166,7 @@ const increaseproductQuantity=async(req,res)=>{
     const product_id = req.body.product_id;
     const type = req.body.type;
     const user_id = req.user_id;
-    const cart = await CART.findOne({user_id:user_id})
+    const cart = await CART.findOne({user_id:user_id}).populate('Products.product_id')
     const product = await PRODUCTS.findById(product_id)
 
     if(!cart){
@@ -168,13 +184,13 @@ const increaseproductQuantity=async(req,res)=>{
                 if(type == "increase" && item.quantity+1 <= stockQuantity){ 
                 item.quantity += 1
                 await cart.save()
-                return  res.status(200).json({"message":"added one "});
+                return  res.status(200).json({"message":"added one ",cart:cart});
                 }
                 if(type == "decrease"){
                     if(item.quantity>1){
                         item.quantity -= 1
                         await cart.save()
-                   return  res.status(200).json({"message":"removed one"});
+                   return  res.status(200).json({"message":"removed one",cart:cart});
                     }
                     return res.status(403).json({"message":"Not Allowed "})
                 }
@@ -187,11 +203,13 @@ const increaseproductQuantity=async(req,res)=>{
     }
 }
 
+
 const deletecartItem =async (req,res)=>{
 
     try{
     const user_id = req.user_id
-    const product_id = req.body.product_id
+    const product_id = req.params.id
+    console.log(product_id)
     const userCart = await CART.findOne({user_id: user_id})
     const allProducts = userCart.Products
     for(const items of allProducts){
@@ -219,7 +237,7 @@ const createReviews = async(req,res)=>{
             products:{$elemMatch:{product_id:product_id}}})
 
         console.log(productboughtCheck)
-        if(duplicateReview || productboughtCheck.lenght == 0 ){
+        if(duplicateReview){
             return res.status(403).json({"message": "not allowed"})
         }
         const newReview = await REVIEWS.create({
@@ -230,7 +248,7 @@ const createReviews = async(req,res)=>{
         });
 
         if (newReview){
-            return res.status(201).json({ message:
+            return res.status(200).json({ message:
                  "Review created successfully", review: newReview });
         } else {
             return res.status(400).json({ message: 
@@ -288,6 +306,21 @@ const updateReview = async(req,res)=>{
 }catch(err){
     console.log(err)
     return res.status(500).json({"message": "internal server error"})
+}
+}
+
+const getAllReviews = async(req,res)=>{
+    try{
+    const product_id = req.params.id
+    if(!product_id){
+        return res.status(403).json({"status":403,"message": "credentials not found"})
+    }
+    const reviews = await REVIEWS.find({product_id : product_id}).sort({createdAt:-1}).populate('user_id')
+    if(reviews.length > 0){
+        return res.status(200).json({"status":200,"message":"reviews sent" ,reviews})
+    }
+}catch(err){
+    console.log(err)
 }
 }
 

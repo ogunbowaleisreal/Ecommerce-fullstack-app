@@ -1,18 +1,38 @@
 import React from 'react';
-import api from '../api';
+import useAxios from '../api';
 import { useState,useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addtocartslice } from '../../reduxfeatures/addtocartslice';
+import { getproductslice } from '../../reduxfeatures/getcartslicer';
 
 export default function AllProducts(){
 
   const [products,setProducts] = useState([])
   const [Loading, setLoading] = useState(false)
   const [toggle,setToggle] = useState(false)
+  const [filter,setFilter] = useState({"Men":false,"Women":false,"Kids":false,"Accessories":false,"Footwear":false})
   const dispatch = useDispatch()
+    const loading = useSelector((state)=> state.getproduct.loading)
+    const items = useSelector((state)=>{state.getproduct.items})
+    const api = useAxios()
 
   const handleDispatch=(item)=>{
     dispatch(addtocartslice(item))
+  }
+
+  const handleChange =async(e)=>{
+
+    const {checked,name} = e.target
+    const newFilter = {...filter,[name]:checked}
+    console.log(newFilter)
+    setFilter(newFilter)
+    try{
+      const res = await api.post('/shop',{newFilter})
+      setProducts(res.data)
+      console.log(res)
+    }catch(err){
+      console.log(err)
+    }
   }
 
   const getProducts=async()=>{
@@ -20,7 +40,6 @@ export default function AllProducts(){
       setLoading(true)
       const res = await api.get('/shop')
       const data = res.data
-      console.log(data)
       setProducts(data)
       setLoading(false)
     } catch (error) {
@@ -29,11 +48,15 @@ export default function AllProducts(){
     }
   }
 
+  const showDetails=(product_id)=>{
+    dispatch(getproductslice(product_id))
+  }
+
   const Category = [
     {"link":"Men","to":"allproducts"}
     ,{"link":"Women","to":"men"},
     {"link":"Kids","to":"women"},
-    {"link":"Accesories","to":"kids"}
+    {"link":"Accessories","to":"kids"}
     ,{"link":"Footwear","to":"footwear"}]
 
     useEffect(()=>{getProducts()},[])
@@ -46,7 +69,7 @@ export default function AllProducts(){
           {Category.map((item,index)=>{
             return <div key={index}>
               <label>
-                <input type='checkbox'></input>
+                <input onChange={handleChange} type='checkbox' value={item.link} name={item.link}></input>
                 {item.link}
               </label>
                </div>
@@ -57,19 +80,21 @@ export default function AllProducts(){
       </div>
       <div className='w-full h-full text-lg font-bold bg-white p-2'>
         <div className='flex justify-between items-center p-2'>
-          <p>All Products</p>
+          <p><i onClick={()=>[setToggle(!toggle)]} class="fa-solid fa-filter md:!hidden"></i> All Products</p>
           <p><i class="fa-solid fa-sort"></i> sort by</p>
         </div>
-        <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 h-[calc(100vh-114px)] overflow-y-auto font-bold'>
+        <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 h-[calc(100vh-114px)] overflow-y-auto font-bold capitalize'>
           {products.map((item)=>
-            <div key={item._id} className='flex flex-col rounded-md gap-1 bg-white text-blue-950 p-2'>
+            <div key={item._id} onClick={()=>{showDetails(item._id)}} className='flex flex-col rounded-md gap-1 md:h-[320px] bg-white text-blue-950 p-2'>
               <img className ="rounded-md object-cover h-[200px] w-full" src={item.image_url} alt={item.category}></img>
-              <p className='text-base md:text-lg'>{item.product_name}</p>
+              <p className='text-base md:text-lg text-wrap'>{item.product_name}</p>
+              <div className='flex flex-col mt-auto'>
               <div className='flex justify-between'>
-              <p className='text-sm md:text-lg'>${item.Price}</p>
-              <p className=' md:font-bold'>{item.discounted_price !== item.Price && item.discounted_price !== undefined ? `$${item.discounted_price}`:""}</p>
+              <p className='text-sm md:text-lg md:font-bold'>${item.Price}</p>
+              <p className='text-sm md:text-lg md:font-bold'>{item.discounted_price !== item.Price && item.discounted_price !== undefined ? `$${item.discounted_price}`:""}</p>
               </div>
-              <button onClick={()=>{handleDispatch({product_id: item._id})}} className='text-white bg-blue-950 text-base rounded-md p-1'>{Loading ==true ? "Loading":"Add to cart"}</button>
+              <button onClick={()=>{handleDispatch({product_id: item._id})}} className='text-white bg-blue-950 text-base rounded-md p-1 mt-auto'>{Loading ==true ? "Loading":"Add to cart"}</button>
+              </div>
             </div>
             )}
         </div>

@@ -1,4 +1,4 @@
-import api from "../api"
+import useAxios from "../api";
 import { useState , useEffect } from "react";
 import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
 import React from "react";
@@ -15,21 +15,19 @@ import Success from "../components/error/success";
 
 
 function Home(){
-    const [transactions , settransactions] = useState(null);
-    const [auth, setauth] = useState(null);
-    const [newtodo, setnewtodo] = useState('')
-    const [error, seterror]= useState(false)
-    const [confirmationMessage,setConfirmationmessage]=useState(false)
-    const [edit, setedit]= useState(false)
+
     const [Id,setId] = useState("")
     const [toggleSidebar , settoggleSidebar] = useState(false)
     const [cart,toggleCart] = useState(false)
     const [sidebarButton, setsidebarButton] = useState(false)
     const [profileToggle,setprofileToggle] = useState(false)
+    const api= useAxios()
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const value = useSelector(state=> state.error.value)
     const toggle = useSelector(state=> state.error.toggle)
+    const detailToggle = useSelector((state)=>state.getproduct.toggle)
+
 
     const logout=async()=>{
         try{
@@ -83,23 +81,6 @@ function Home(){
         }
     }
 
-    const getTransactions = async()=>{
-        try{
-        const response = await api.get('/transactions')
-        const transaction = await response.data
-        console.log(transaction)
-        if(transaction){
-            settransactions(transaction)
-            setauth(true)
-            return
-        }
-    }catch(err){
-        seterror(true)
-       setauth(false)
-       console.log(err) 
-       return
-    }
-    };
 // small screens only
     const rollSidebar=()=>{
         const newState= !toggleSidebar
@@ -132,14 +113,11 @@ const Category = [
     {"link":"Women","to":"women"},
     {"link":"Kids","to":"kids"}
     ,{"link":"Footwear","to":"footwear"}]
-    useEffect(()=>{getTransactions()},[])
-    if(auth == null){
-        return <div class="flex justify-center h-screen items-center animate-pulse"><p> LOADING....</p></div>
-    }
+
    return (
-    <main className="relative flex flex-col h-screen bg-gray-300">
+    <main className="relative flex flex-col h-screen bg-gray-100">
         {cart&& <Cart cart={cart} toggleCart={toggleCart}></Cart>}
-        {<Productview></Productview>}
+        {detailToggle && <Productview></Productview>}
         {toggle && <Success error={value}></Success>}
         {sidebarButton && <Navigationbar setsidebarButton={setsidebarButton} sidebarButton={sidebarButton}></Navigationbar>}
     <nav className=" bg-white h-[50px] border-b-1 xl:h-[70px] flex  justify-between w-full items-center p-2">

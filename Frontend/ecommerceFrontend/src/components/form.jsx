@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import {useNavigate } from 'react-router-dom'
-import api from '../api'
+import useAxios from '../api.js'
+import useAuth from "../useAuth.js";
 
-function Form({route,method}) {
 
+function Form({route,method}){
+  const api = useAxios()
+    const { accessToken, setAccessToken } = useAuth();
   const [username, setusername] = useState('')
   const [password, setpassword] = useState('')
   const [error, seterror]= useState(false)
@@ -23,6 +26,10 @@ function Form({route,method}) {
         
     if(name == 'Login'){  
     if(response.status== 200){
+      console.log(response)
+      const data = response.data.access_token
+      console.log(data)
+      setAccessToken(data)
       navigate("/")
       return
     }
@@ -40,17 +47,18 @@ function Form({route,method}) {
 
   return (
     <div class= "min-h-screen flex w-full">
-      <div class = "flex bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 min-h-screen w-full justify-center items-center relative">
+      <div class = "flex bg-blue-400 min-h-screen w-full justify-center items-center relative">
       {error && <div class="absolute top-0 font-bold text-4xl bg-red-600 w-full text-center p-1" >Error</div>}
-    <form class= "flex p-10 shadow-2xl w-md" onSubmit={formSubmission}>
+    <form class= "flex p-10  w-md" onSubmit={formSubmission}>
       <div class= "grid w-full text-center">  
-      <h1 class="text-4xl font-bold mb-5">{name}</h1>
-      <input type="text" class="w-full mb-5 p-1 border" onChange={(e)=>{setusername(e.target.value)}}
+      <h1 class="text-4xl font-bold mb-5"><i class="fa-solid fa-cart-shopping fa-4x"></i></h1>
+      <input type="text" class="w-full font-bold mb-5 p-1 border-2 border-white rounded-sm focus:border-white focus:outline-none" onChange={(e)=>{setusername(e.target.value)}}
        value={username} placeholder='username'/>
-      <input  type="password" class="w-full mb-10 p-1 border" onChange={(e)=>{setpassword(e.target.value)}} 
-      value={password}  placeholder='password'/>
-      <button class = "bg-blue-600 p-2" type='submit'> {name.toUpperCase()}</button>
-      {name == "Login" ? <p class = "text-blue-400 hover:cursor-default hover:underline" onClick={()=>{navigate("/register")}} >Register</p> : <p class= "text-blue-400 hover:cursor-default hover:underline" onClick={()=>{navigate("/login")}}>Already have an account ? Login instead </p>} 
+      <input  type="password" class="w-full font-bold mb-10 p-1 border-2 border-white rounded-sm focus:border-white focus:outline-none" onChange={(e)=>{setpassword(e.target.value)}} 
+      value={password}  placeholder= "Enter password" />
+      <button class = "bg-white p-2 text-blue-500 rounded-sm" type='submit'> {name.toUpperCase()}</button>
+      {name == "Login" ? <p class = "text-white hover:cursor-default mt-2" onClick={()=>{navigate("/register")}} >Register</p>
+       : <p class= "text-blue-400 hover:cursor-default" onClick={()=>{navigate("/login")}}>Already have an account ? Login instead </p>} 
       </div>
     </form>
     </div>

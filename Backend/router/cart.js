@@ -9,8 +9,10 @@ router.route("/")
     .get(jwtVerify,getcartItems)
     .post(jwtVerify,createoraddCart)
     .patch(jwtVerify,increaseproductQuantity)
+    
 
 router.route("/:id")
       .get(jwtVerify)
+      .delete(jwtVerify,deletecartItem)
 
 module.exports = router

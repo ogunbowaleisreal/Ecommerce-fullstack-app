@@ -11,6 +11,11 @@ const createProduct=async (req,res)=>{
     const result = await cloudinary.uploader.upload(req.file.path,
         {folder:'products_images'}
     )
+        const optimizedUrl = cloudinary.url(result.public_id, {
+        fetch_format: 'auto',
+        quality: 'auto'
+    });
+
     const newProduct = await PRODUCTS.create({
      product_name:product_name,
      category : category,
@@ -18,14 +23,17 @@ const createProduct=async (req,res)=>{
      discounted_price :discounted_price,
      quantity :quantity,
      description :description,
-     image_url: result.secure_url
+     image_url: optimizedUrl
     })
     console.log(newProduct)
+    const allProducts = await PRODUCTS.find({})
     if(newProduct){
-        return res.status(200).json({"message":"New Product added successfully"})
+        return res.status(200).json({"message":"New Product added successfully",newProduct})
+    }else{
+        return res.status(403).json({"message":"unallowed credentials, plss review product details and ensure it aligns with allowed paramaters "})
     }
 }catch(err){
-    console.log(err.message)
+    console.log(err)
     return res.status(500).send("internal server error")
 }
 }
@@ -38,7 +46,7 @@ const productDetails=async(req,res)=>{
     const reviews = await REVIEW.find({product_id:product_id}).sort({createdAt:-1})
     if(product){
         console.log(product)
-    return res.json([product, reviews])
+    return res.status(200).json({product, reviews})
     }else{
         return res.status(404).json({"message":"product not found"})
     }
@@ -118,7 +126,7 @@ const getOrders=async (req,res)=>{
 const getallProducts=async (req,res)=>{
     try{
     const products = await PRODUCTS.find({}).sort({createdAt:-1})
-    return res.json(products)
+    return res.status(200).json(products)
     }catch(err){
         console.log(err.message)
         return res.status(500).json({message: "internal error"})
