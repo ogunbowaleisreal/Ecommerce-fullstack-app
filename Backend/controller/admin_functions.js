@@ -3,6 +3,9 @@ const ORDERS = require('../model/orders');
 const USERS = require('../model/User');
 const REVIEW = require('../model/reviews');
 const cloudinary = require('../config/cloudinary')
+require('dotenv').config()
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
+
 
 const createProduct=async (req,res)=>{
  
@@ -43,7 +46,7 @@ const productDetails=async(req,res)=>{
     try{       
     const product_id = req.params.id
     const product =await PRODUCTS.findById(product_id)
-    const reviews = await REVIEW.find({product_id:product_id}).sort({createdAt:-1})
+    const reviews = await REVIEW.find({product_id:product_id}).sort({createdAt:-1}).populate('user_id','username')
     if(product){
         console.log(product)
     return res.status(200).json({product, reviews})

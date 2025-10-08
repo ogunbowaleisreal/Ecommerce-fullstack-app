@@ -1,9 +1,8 @@
 import React from 'react'
 import { useState,useEffect } from 'react';
-import useAxios from '../api';
-
+import axiosInstance from '../axiosinstance';
 export default function Maincontent({productForm,setproductForm,products,setProducts}) {
-  const api = useAxios()
+  const api = axiosInstance
 
   const getProducts = async()=>{
     try{

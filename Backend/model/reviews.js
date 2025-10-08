@@ -14,7 +14,7 @@ const reviewSchema = new schema({
     },
     user_id :{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Users"       
+        ref: "User"       
     },
     comment:{
         type: String,
@@ -27,5 +27,4 @@ const reviewSchema = new schema({
 
 )
 
-const newDb = mongoose.connection.useDb("EcommerceDb") 
-module.exports = newDb.model('Review',reviewSchema)
+module.exports = mongoose.model('Review',reviewSchema)

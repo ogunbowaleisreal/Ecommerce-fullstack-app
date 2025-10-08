@@ -18,6 +18,8 @@ app.use(cors(corsOptions));
 
 app.use(cookieParser());
 
+app.use('/checkout', require('./router/checkout'));
+
 app.use(express.json());
 
 app.use(express.urlencoded({extended : false}));
@@ -34,6 +36,7 @@ app.use('/logout', require("./router/logout"));
 
 app.use('/cart', require("./router/cart"));
 
+
 app.use('/orders', require("./router/order"));
 
 app.use('/shop', require('./router/shop_routes'));
@@ -46,5 +49,4 @@ mongoose.connection.once('open',()=>{
     console.log('mongoose successfully connected')
     app.listen(PORT,()=>{console.log(`server running on port${PORT}`)});
 })
-
 

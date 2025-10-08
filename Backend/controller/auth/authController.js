@@ -20,7 +20,7 @@ const authUser = async(req,res)=>{
                 {"username": registeredUser.username, "roles" : roles ,"user_id":user_id} 
             },
                 process.env.ACCESS_TOKEN_SECRET,
-                {expiresIn: '30s'}
+                {expiresIn: '5m'}
             );
             const refresh_token = jwt.sign(
                 {userInfo:
@@ -31,7 +31,7 @@ const authUser = async(req,res)=>{
             registeredUser.refresh_token = refresh_token
             const result = await registeredUser.save();
              res.cookie('jwt_refresh', refresh_token, {httpOnly:true,sameSite:'Lax',secure:false,maxAge: 24 * 60 * 60 * 1000})
-            return res.status(200).json({"message":"cookies are set","status":200,access_token})
+            return res.status(200).json({"message":"cookies are set","status":200,access_token,user_id,username})
         }
         return res.status(404).json({"message":"username & password do not match","status":404})
     }

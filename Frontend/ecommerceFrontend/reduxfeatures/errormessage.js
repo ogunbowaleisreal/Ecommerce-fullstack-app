@@ -9,6 +9,9 @@ export const errorSlice = createSlice({
     },
     reducers:{
         setmessage:(state,action)=>{
+            if(state.toggle == true){
+                state.toggle == false
+            }
             state.value = action.payload;
             state.toggle = true
         },

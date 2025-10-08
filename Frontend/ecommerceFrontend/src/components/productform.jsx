@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import useAxios from '../api'; 
+import axiosInstance from '../axiosinstance'; 
 import { useDispatch, useSelector } from 'react-redux';
 import { setmessage,clearmessage} from '../../reduxfeatures/errormessage';
 
@@ -11,7 +11,7 @@ export default function Productform({productForm,setproductForm,setProducts,prod
     const[error,setError]=useState(false)
     const [loading,setLoading] = useState(true)
     const dispatch = useDispatch()
-    const api = useAxios()
+    const api = axiosInstance
   
 
       const handleChange = (e)=>{
@@ -23,7 +23,6 @@ export default function Productform({productForm,setproductForm,setProducts,prod
           {...formData, [name]:value}
           
         ))
-        console.log(formData)
         setTimeout(()=>{setError(null)},3000)
       }
     }
@@ -42,7 +41,6 @@ export default function Productform({productForm,setproductForm,setProducts,prod
         try{
             const response = await api.post('/admin',data)
             if(response.status == 200){
-              console.log(response.data)
               const data = response.data.newProduct
               setProducts((prev)=>[data,...prev])
               setLoading(true)

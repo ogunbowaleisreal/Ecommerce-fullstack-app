@@ -21,6 +21,4 @@ const usersSchema = new schema({
      refresh_token: String
 });
 
-const newDb = mongoose.connection.useDb("EcommerceDb") 
-
-module.exports = newDb.model('User', usersSchema)
+module.exports = mongoose.model('User', usersSchema)

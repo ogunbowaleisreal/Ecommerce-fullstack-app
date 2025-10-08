@@ -1,13 +1,12 @@
-import {Navigate, useNavigate} from 'react-router-dom';
+import {Navigate} from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import useAxios from '../api';
-import useAuth from '../useAuth';
 import React from 'react';
+import axiosInstance from '../axiosinstance';
+import { setAccessToken } from '../tokenService';
 
 
-function ProtectedRoute({route,children}){
-    const api = useAxios()
-  const { accessToken, setAccessToken } = useAuth();
+function ProtectedRoute({children}){
+    const api = axiosInstance
     const [authorized, setauthorized] = useState(null)
 
     const auth= async ()=>{
@@ -16,13 +15,11 @@ function ProtectedRoute({route,children}){
             if(response.status == 200){
                 setauthorized(true)
                 return
-            }else{
-                console.log(response.status == 200)
-                setauthorized(false)
-                return
-            }  
+            }
+            setauthorized(false)
     }catch(err){
-        setauthorized(false)
+        console.log(err)
+        setauthorized(false)    
     }
     }
     useEffect(()=>{auth()},[])

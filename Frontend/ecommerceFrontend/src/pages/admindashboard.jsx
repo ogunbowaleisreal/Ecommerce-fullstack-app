@@ -1,22 +1,20 @@
 import React from 'react';
-import api from "../api.js";
+import axiosInstance from '../axiosinstance.js';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {Navigate, useNavigate,Outlet} from 'react-router-dom'
 import Sidebar from '../components/Sidebar.jsx';
-import Maincontent from '../components/Maincontent.jsx';
 import Productform from '../components/productform.jsx';
 import Success from '../components/error/success.jsx';
-import Orders from '../components/orders.jsx';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function Admindashboard({productForm, setproductForm,products,setProducts}) {
   const navigate = useNavigate()
   const [sideBar,setsideBar] = useState(false)
-  const [content, setContent] = useState('dashboard')
   const [error, seterror] = useState(false)
   const toggle = useSelector((state)=>state.error.toggle)
   const value= useSelector((state)=>state.error.value)
+  const api = axiosInstance
  
     const logout=async()=>{
         try{

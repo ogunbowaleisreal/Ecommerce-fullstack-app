@@ -21,7 +21,10 @@ const orderSchema = new schema({
             required: true
         }
     }],
-
+    address:{
+        type: String,
+        required:true
+    },
     totalAmount: Number,
     status:{
         type: String,
@@ -38,5 +41,4 @@ payment_status:{
     }
 )
 
-const newDb = mongoose.connection.useDb("EcommerceDb") 
-module.exports = newDb.model('Order',orderSchema)
+module.exports = mongoose.model('Order',orderSchema)

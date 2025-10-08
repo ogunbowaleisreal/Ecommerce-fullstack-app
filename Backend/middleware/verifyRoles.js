@@ -5,7 +5,6 @@ const verify_Roles = (...allowedRoles)=>{
             
         const rolesArray = [...allowedRoles]
         const rolesAvailable = []
-        console.log(req.user)
         for (items of rolesArray){
             if(!req.roles.includes(items)){
                 rolesAvailable.push(false)

@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
 import {useNavigate } from 'react-router-dom'
-import useAxios from '../api.js'
-import useAuth from "../useAuth.js";
+import axiosInstance from '../axiosinstance.js';
+import { setToken,setUser } from '../../reduxfeatures/authslicer.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAccessToken } from '../tokenService.js';
 
 
 function Form({route,method}){
-  const api = useAxios()
-    const { accessToken, setAccessToken } = useAuth();
+  const api = axiosInstance
   const [username, setusername] = useState('')
   const [password, setpassword] = useState('')
   const [error, seterror]= useState(false)
   const navigate = useNavigate();
+  const dispatch = useDispatch()
   const name = method == 'Login' ? 'Login': 'Register'
 
   const formSubmission = async(e)=>{
@@ -26,10 +28,11 @@ function Form({route,method}){
         
     if(name == 'Login'){  
     if(response.status== 200){
-      console.log(response)
       const data = response.data.access_token
-      console.log(data)
+      const user_data = response.data
+      console.log(response.data)
       setAccessToken(data)
+      dispatch(setUser(user_data))
       navigate("/")
       return
     }

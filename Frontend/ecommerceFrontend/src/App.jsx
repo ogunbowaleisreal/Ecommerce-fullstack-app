@@ -13,13 +13,13 @@ import Products from "./components/adminproducts"
 import Maincontent from "./components/Maincontent";
 import Shopmaincontent from "./components/shopmainContent";
 import AllProducts from "./components/products";
-import Checkout from "./components/checkout"
+import Checkout from "./components/checkout";
 
 function Registerlogout(){
     return <Register/>
 }
 function App(){
-
+  
   const [productForm, setproductForm] = useState(false)
   const [products, setProducts] = useState([])
   
@@ -39,6 +39,10 @@ function App(){
         <Route path = 'allproducts' element = {<AllProducts/>}/>
         <Route path='shop' index element={<Shopmaincontent/>}></Route>
         <Route path = 'checkout' element={<Checkout/>}></Route>
+        <Route path = 'men' element={<Checkout/>}></Route>
+        <Route path = 'women' element={<Checkout/>}></Route>
+        <Route path = 'kids' element={<Checkout/>}></Route>
+        <Route path = 'acessories' element={<Checkout/>}></Route>
         </Route>
         <Route path= '*' element = {<Notfound/>}/>
         <Route path= '/register' element = {<Registerlogout/>}/>

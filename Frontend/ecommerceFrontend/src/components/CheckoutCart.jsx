@@ -5,7 +5,7 @@ import {useDispatch } from 'react-redux';
 import { setTotal,setCart ,deletecartItem,decreaseCount} from '../../reduxfeatures/getcartsslicer';
 import axiosInstance from '../axiosinstance';
 
-export default function Cartitemcard({items}) {
+export default function Checkoutcart({items}) {
     const [quantityLoading , setQuantityLoading] = useState(true)
     const [deletionLoader, setDeletionLoader] = useState(true)
     const dispatch= useDispatch()
@@ -51,25 +51,14 @@ export default function Cartitemcard({items}) {
         }
       }
   return (
-    <div key={items._id} className='flex p-1 gap-2 text-lg font-bold hover:bg-gray-200 hover:shadow-md'>
-       <img className='md:w-[60px] w-[50px] h-[50px] object-cover rounded-md' src={items.product_id.image_url} alt={items.product_id.product_name}></img>
-        <div className='flex-col flex gap-1 text-nowrap truncate'>
-        <p className='md:text-md text-sm font-semibold text-nowrap truncate capitalize'>{items.product_id.product_name}</p>
-        {quantityLoading ? <div className='flex gap-2 items-center text-sm'>
-        <i onClick={()=>{
-            setQuantityLoading(false)
-            increaseQuantity(items.product_id._id,"decrease")}}
-            class="fa-solid fa-minus p-1 rounded-full hover:bg-gray-300"></i><p className='p-1 rounded-sm'>{items.quantity}</p>
-            <i onClick={()=>{
-            setQuantityLoading(false)
-            increaseQuantity(items.product_id._id,"increase")}} class="fa-solid fa-plus p-1 rounded-full hover:bg-gray-300"></i>
-            </div> : <i class="fa-solid fa-spinner self-start ml-5 animate-spin"></i>}
+    <div key={items._id} className='flex items-center rounded-md justify-between p-2 gap-2 md:mt-2 text-lg font-bold hover:bg-gray-200 hover:shadow-md'>
+       <img className='md:w-[60px] w-[50px] h-[40px] object-cover rounded-md' src={items.product_id.image_url} alt={items.product_id.product_name}></img>
+        <div className='flex-col text-sm flex gap-1 text-nowrap truncate'>
+        <p className='font-bold text-nowrap truncate capitalize'>{items.product_id.product_name}</p>
+        <p>{items.quantity}</p>
             </div>
             <div className='flex flex-col ml-auto'>
-              <p className='ml-auto md:text-md text-sm'>${items.product_id.Price}</p>
-              <p onClick={()=>{deleteCartItem(items.product_id._id)}} 
-              className='ml-auto mt-auto hover:shadow-lg hover:bg-white p-1 rounded-md'>{deletionLoader ?<i class="fa-solid fa-trash"></i>
-              : <i class="fa-solid fa-spinner animate-spin"></i>}</p> 
+              <p className='ml-auto text-sm md:text-md'>${items.product_id.Price}</p>
             </div>
     </div>
   )
